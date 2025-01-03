@@ -1,0 +1,39 @@
+{{ define "task/add" }}
+{{ template "layout/header" }}
+<div class="container">
+    <h1>Add Task</h1>
+    <form id="task-form" method="POST">
+        <div class="form-group">
+            <label for="title">任务名称</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="description">任务详情</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">添加</button>
+    </form>
+</div>
+<script>
+    $("#task-form").submit(function(event) {
+        event.preventDefault();
+        // 发送POST请求,json格式
+        $.ajax({
+            url: "/api/task/add",
+            type: "POST",
+            data: JSON.stringify({
+                name: $("#title").val(),
+                detail: $("#description").val()
+            }),
+            contentType: "application/json",
+            success: function(data) {
+                window.location.href = "/tasks";
+            },
+            error: function(xhr, status, error) {
+                alert("Failed to add task: " + error);
+            }
+        });
+    });
+</script>
+{{ template "layout/footer" }}
+{{ end }}

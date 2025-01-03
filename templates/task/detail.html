@@ -1,0 +1,16 @@
+{{ define "task/detail" }}
+{{ template "layout/header" }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{.Task.Title }}</h1>
+            <p>{{.Task.Description }}</p>
+            <p>Status: {{.Task.Status }}</p>
+            <p>Created At: {{.Task.CreatedAt }}</p>
+            <p>Updated At: {{.Task.UpdatedAt }}</p>
+            <a href="/tasks" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+</div>
+{{ template "layout/footer" }}
+{{ end }}
