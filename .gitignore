@@ -1,1 +1,3 @@
 myapp
+# 忽略本地配置文件
+config/config.yml

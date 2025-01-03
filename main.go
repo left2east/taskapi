@@ -3,14 +3,18 @@ package main
 import (
 	"embed"
 	"taskapi/config"
-	"taskapi/models"
-
-	)
+	"taskapi/router"
+	"taskapi/util"
+)
 
 //go:embed templates/*
 var embeddedFiles embed.FS
 
+//go:embed config/*.yml
+var embeddedConfigFiles embed.FS
+
 func main() {
-	models.InitPostgresDb()
-	config.InitRouter(embeddedFiles)
+	config.InitConfig(embeddedConfigFiles)
+	router.InitRouter(embeddedFiles)
+	util.InitPostgresDb()
 }

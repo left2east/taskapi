@@ -1,8 +1,9 @@
-package models
+package util
 
 import (
 	"fmt"
 	"log"
+	"taskapi/config"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -11,7 +12,7 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-var postgresdb *gorm.DB
+var Postgresdb *gorm.DB
 
 var err error
 
@@ -26,14 +27,14 @@ func InitPostgresDb() {
 		},
 	)
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		"localhost",
-		"5432",
-		"mygin",
-		"8WhJCBXETvrC",
-		"template1",
+		config.AppConfig.Db.Host,
+		config.AppConfig.Db.Port,
+		config.AppConfig.Db.User,
+		config.AppConfig.Db.Pass,
+		config.AppConfig.Db.Dbname,
 	)
 
-	postgresdb, err = gorm.Open(postgres.New(postgres.Config{
+	Postgresdb, err = gorm.Open(postgres.New(postgres.Config{
 		DSN: dsn,
 	}), &gorm.Config{
 		Logger: newLogger,
@@ -46,10 +47,9 @@ func InitPostgresDb() {
 		log.Fatal("连接数据库失败，请检查参数：", err)
 		panic(err)
 	}
-	postgresdb.AutoMigrate(&TaskTable{})
 
 	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
-	sqlDB, err := postgresdb.DB()
+	sqlDB, err := Postgresdb.DB()
 	if err != nil {
 		fmt.Println("获取通用数据库对象，使用连接池失败，请检查错误：", err)
 	}

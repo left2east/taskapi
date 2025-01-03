@@ -3,6 +3,8 @@ package models
 import (
 	"log"
 	"time"
+
+	"taskapi/util"
 )
 
 /*
@@ -44,7 +46,7 @@ func AddTask(data *TaskTable) int {
 	data.Status = TaskStatusInit
 	data.CreatedAt = GetCurrentTime()
 	data.UpdatedAt = GetCurrentTime()
-	err := postgresdb.Create(&data).Error
+	err := util.Postgresdb.Create(&data).Error
 	if err != nil {
 		log.Fatal(err.Error())
 		return 0
@@ -54,37 +56,37 @@ func AddTask(data *TaskTable) int {
 
 func GetTask(id int) TaskTable {
 	var Task TaskTable
-	postgresdb.Where("id = ?", id).First(&Task)
+	util.Postgresdb.Where("id = ?", id).First(&Task)
 	return Task
 }
 
 func FinishTask(taskId int) {
 	var Task TaskTable
-	postgresdb.Where("id = ?", taskId).First(&Task)
+	util.Postgresdb.Where("id = ?", taskId).First(&Task)
 	if Task.Status == TaskStatusDone {
 		return
 	}
 	Task.Status = TaskStatusDone
 	Task.FinishTime = GetCurrentTime()
 	Task.UpdatedAt = GetCurrentTime()
-	postgresdb.Save(&Task)
+	util.Postgresdb.Save(&Task)
 }
 
 func BeginTask(taskId int) {
 	var Task TaskTable
-	postgresdb.Where("id = ?", taskId).First(&Task)
+	util.Postgresdb.Where("id = ?", taskId).First(&Task)
 	if Task.Status == TaskStatusDoing {
 		return
 	}
 	Task.Status = TaskStatusDoing
 	Task.BeginTime = GetCurrentTime()
 	Task.UpdatedAt = GetCurrentTime()
-	postgresdb.Save(&Task)
+	util.Postgresdb.Save(&Task)
 }
 
 func ListTask(keyword string) []TaskTable {
 	var Tasks []TaskTable
-	query := postgresdb.Where("status != ?", TaskStatusDelete)
+	query := util.Postgresdb.Where("status != ?", TaskStatusDelete)
 	if keyword != "" {
 		query = query.Where("name like ?", "%"+keyword+"%")
 	}
@@ -94,18 +96,18 @@ func ListTask(keyword string) []TaskTable {
 
 func DeleteTask(id uint) {
 	var Task TaskTable
-	postgresdb.Where("id = ?", id).First(&Task)
+	util.Postgresdb.Where("id = ?", id).First(&Task)
 	if Task.Status == TaskStatusDelete {
 		return
 	}
 	Task.Status = TaskStatusDelete
 	Task.UpdatedAt = GetCurrentTime()
-	postgresdb.Save(&Task)
+	util.Postgresdb.Save(&Task)
 }
 
 func UpdateTask(data *TaskTable) {
 	var Task TaskTable
-	postgresdb.Where("id = ?", data.ID).First(&Task)
+	util.Postgresdb.Where("id = ?", data.ID).First(&Task)
 	if Task.Status == TaskStatusDelete {
 		return
 	}
@@ -130,7 +132,7 @@ func UpdateTask(data *TaskTable) {
 		Task.Detail = data.Detail
 	}
 	Task.UpdatedAt = GetCurrentTime()
-	postgresdb.Save(&Task)
+	util.Postgresdb.Save(&Task)
 }
 
 func GetCurrentTime() string {
