@@ -15,6 +15,6 @@ var embeddedConfigFiles embed.FS
 
 func main() {
 	config.InitConfig(embeddedConfigFiles)
-	router.InitRouter(embeddedFiles)
 	util.InitPostgresDb()
+	router.InitRouter(embeddedFiles)
 }
