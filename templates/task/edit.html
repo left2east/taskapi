@@ -22,7 +22,7 @@
             url: "/api/task/update",
             type: "POST",
             data: JSON.stringify({
-                id: "{{.task.ID }}",
+                id: parseInt("{{.task.ID }}"),
                 name: $("#title").val(),
                 detail: $("#description").val()
             }),
