@@ -46,14 +46,14 @@
                         var tdCreatedAt = $("<td>").text(task.created_at.substring(5));
                         var tdOperation = $("<td>");
                         var aBegin = $("<a>").attr("href", "#").text("开始").click(function() {
-                            beginTask(task.ID);
+                            beginTask(task.id);
                         });
-                        var aEdit = $("<a>").attr("href", "/tasks/edit/" + task.ID).text("编辑");
+                        var aEdit = $("<a>").attr("href", "/tasks/edit/" + task.id).text("编辑");
                         var aDelete = $("<a>").attr("href", "#").text("删除").click(function () {
-                            deleteTask(task.ID);
+                            deleteTask(task.id);
                         });
                         var aFinish = $("<a>").attr("href", "#").text("完成").click(function () {
-                            finishTask(task.ID);
+                            finishTask(task.id);
                         });
                         var tdStatus = $("<td>").text(task.status);
                         if (task.status === 1) {
