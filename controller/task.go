@@ -66,15 +66,19 @@ func ListTask(c *gin.Context) {
 }
 
 func DeleteTask(c *gin.Context) {
-	var data models.TaskTable
-	err := c.BindJSON(&data)
+	taskId := c.PostForm("id")
+	if taskId == "" {
+		c.JSON(200, gin.H{"success": false})
+		return
+	}
+	// 转化为int类型
+	id, err := strconv.Atoi(taskId)
 	if err != nil {
-		log.Fatal(err.Error())
 		c.JSON(200, gin.H{"success": false})
 		return
 	}
 
-	models.DeleteTask(data.ID)
+	models.DeleteTask(id)
 	c.JSON(200, gin.H{"success": true})
 }
 

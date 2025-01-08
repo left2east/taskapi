@@ -86,7 +86,7 @@ func BeginTask(taskId int) {
 
 func ListTask(keyword string) []TaskTable {
 	var Tasks []TaskTable
-	query := util.Postgresdb.Where("status != ?", TaskStatusDelete)
+	query := util.Postgresdb.Where("status in (?,?)", TaskStatusInit, TaskStatusDoing)
 	if keyword != "" {
 		query = query.Where("name like ?", "%"+keyword+"%")
 	}
@@ -94,7 +94,7 @@ func ListTask(keyword string) []TaskTable {
 	return Tasks
 }
 
-func DeleteTask(id uint) {
+func DeleteTask(id int) {
 	var Task TaskTable
 	util.Postgresdb.Where("id = ?", id).First(&Task)
 	if Task.Status == TaskStatusDelete {
